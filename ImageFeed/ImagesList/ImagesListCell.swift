@@ -10,7 +10,7 @@ import UIKit
 final class ImagesListCell: UITableViewCell {
     
     // MARK: - Static Properties
-    static let reuseIdentifier = Constants.Other.reuseIdentifier.rawValue
+    static let reuseIdentifier = Constants.Other.reuseIdentifier
     
     // MARK: - IB Outlets
     @IBOutlet weak var likeButton: UIButton!
@@ -33,8 +33,8 @@ final class ImagesListCell: UITableViewCell {
         gradientView.backgroundColor = .clear
         let gradientLayer = CAGradientLayer()
         gradientLayer.frame = gradientView.bounds
-        let startColor = UIColor(named: Constants.ColorNames.YPGradientStart.rawValue) ?? UIColor.clear
-        let endColor = UIColor(named: Constants.ColorNames.YPGradientEnd.rawValue) ?? UIColor.clear
+        let startColor = UIColor(named: Constants.ColorNames.YPGradientStart) ?? UIColor.clear
+        let endColor = UIColor(named: Constants.ColorNames.YPGradientEnd) ?? UIColor.clear
         gradientLayer.colors = [startColor.cgColor, endColor.cgColor]
         gradientView.layer.addSublayer(gradientLayer)
     }

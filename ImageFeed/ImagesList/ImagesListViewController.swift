@@ -19,8 +19,8 @@ final class ImagesListViewController: UIViewController {
     
     private lazy var dateFormatter: DateFormatter = {
         let formatter = DateFormatter()
-        formatter.dateStyle = .long
-        formatter.timeStyle = .none
+        formatter.dateFormat = Constants.Other.dateFormat
+        formatter.locale = Locale(identifier: Constants.Other.formatterLocal)
         return formatter
     }()
     
@@ -40,17 +40,9 @@ final class ImagesListViewController: UIViewController {
         cell.dateLabel.text = dateFormatter.string(from: Date())
         
         if indexPath.row % 2 == 0 {
-            guard let image = UIImage(named: Constants.ImageNames.LikeOn.rawValue) else {
-                return
-            }
-            
-            cell.likeButton.setImage(image, for: .normal)
+            cell.likeButton.setImage(UIImage(named: Constants.ImageNames.LikeOn), for: .normal)
         } else {
-            guard let image = UIImage(named: Constants.ImageNames.LikeOff.rawValue) else {
-                return
-            }
-            
-            cell.likeButton.setImage(image, for: .normal)
+            cell.likeButton.setImage(UIImage(named: Constants.ImageNames.LikeOff), for: .normal)
         }
     }
 }

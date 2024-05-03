@@ -8,16 +8,18 @@
 import Foundation
 
 enum Constants {
-    enum ColorNames: String {
-        case YPGradientStart = "YP Gradient Start"
-        case YPGradientEnd = "YP Gradient End"
+    enum ColorNames {
+        static let YPGradientStart = "YP Gradient Start"
+        static let YPGradientEnd = "YP Gradient End"
     }
     
-    enum ImageNames: String {
-        case LikeOn = "like_on"
-        case LikeOff = "like_off"
+    enum ImageNames {
+        static let LikeOn = "like_on"
+        static let LikeOff = "like_off"
     }
-    enum Other: String {
-        case reuseIdentifier = "ImagesListCell"
+    enum Other {
+        static let reuseIdentifier = "ImagesListCell"
+        static let dateFormat = "dd MMMM yyyy"
+        static let formatterLocal = "ru_RU"
     }
 }
