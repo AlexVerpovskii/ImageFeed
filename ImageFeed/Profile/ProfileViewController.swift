@@ -70,7 +70,6 @@ final class ProfileViewController: UIViewController {
     }
 }
 
-
 //MARK: Setup UI
 extension ProfileViewController {
     private func setupSubview() {
@@ -82,7 +81,6 @@ extension ProfileViewController {
     }
     
     private func setupConstraint() {
-        //Есть смысл так разбивать для удобного чтения или лучше все в одну функцию activate?
         NSLayoutConstraint.activate([
             avatarImage.topAnchor.constraint(equalTo: view.topAnchor, constant: 76),
             avatarImage.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor, constant: 16),

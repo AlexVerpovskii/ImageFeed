@@ -28,7 +28,6 @@ final class SingleImageViewController: UIViewController {
         photoImageView.frame.size = image.size
         
         rescaleAndCenterImageInScrollView(image: image)
-        // Do any additional setup after loading the view.
     }
     
     @IBAction func backButtonAction(_ sender: Any) {
@@ -41,7 +40,7 @@ final class SingleImageViewController: UIViewController {
         let share = UIActivityViewController(
             activityItems: [image],
             applicationActivities: nil)
-        self.present(share, animated: true)
+        present(share, animated: true)
     }
     
     
@@ -64,6 +63,7 @@ final class SingleImageViewController: UIViewController {
 }
 
 extension SingleImageViewController: UIScrollViewDelegate {
+    
     func viewForZooming(in scrollView: UIScrollView) -> UIView? {
         photoImageView
     }
