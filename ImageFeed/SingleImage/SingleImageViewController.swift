@@ -22,26 +22,28 @@ final class SingleImageViewController: UIViewController {
         super.viewDidLoad()
         scrollView.minimumZoomScale = 0.1
         scrollView.maximumZoomScale = 1.125
-        photoImageView.image = image
-        photoImageView.frame.size = image!.size
         
-        rescaleAndCenterImageInScrollView(image: image!)
+        guard let image else { return }
+        photoImageView.image = image
+        photoImageView.frame.size = image.size
+        
+        rescaleAndCenterImageInScrollView(image: image)
         // Do any additional setup after loading the view.
     }
     
-
-    /*
-    // MARK: - Navigation
-
-    // In a storyboard-based application, you will often want to do a little preparation before navigation
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        // Get the new view controller using segue.destination.
-        // Pass the selected object to the new view controller.
-    }
-    */
     @IBAction func backButtonAction(_ sender: Any) {
         dismiss(animated: true)
     }
+    
+    @IBAction func didTapShareButton(_ sender: Any) {
+        guard let image else { return }
+        
+        let share = UIActivityViewController(
+            activityItems: [image],
+            applicationActivities: nil)
+        self.present(share, animated: true)
+    }
+    
     
     private func rescaleAndCenterImageInScrollView(image: UIImage) {
         let minZoomScale = scrollView.minimumZoomScale
@@ -64,5 +66,11 @@ final class SingleImageViewController: UIViewController {
 extension SingleImageViewController: UIScrollViewDelegate {
     func viewForZooming(in scrollView: UIScrollView) -> UIView? {
         photoImageView
+    }
+    
+    func scrollViewDidEndZooming(_ scrollView: UIScrollView, with view: UIView?, atScale scale: CGFloat) {
+        let offsetX = max((scrollView.bounds.width - scrollView.contentSize.width) * 0.5, 0)
+        let offsetY = max((scrollView.bounds.height - scrollView.contentSize.height) * 0.5, 0)
+        scrollView.contentInset = UIEdgeInsets(top: offsetY, left: offsetX, bottom: 0, right: 0)
     }
 }

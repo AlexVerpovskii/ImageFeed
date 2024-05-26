@@ -33,8 +33,8 @@ final class ImagesListCell: UITableViewCell {
         gradientView.backgroundColor = .clear
         let gradientLayer = CAGradientLayer()
         gradientLayer.frame = gradientView.bounds
-        let startColor = UIColor(named: Constants.ColorNames.YPGradientStart) ?? UIColor.clear
-        let endColor = UIColor(named: Constants.ColorNames.YPGradientEnd) ?? UIColor.clear
+        let startColor = UIColor.ypGradientStart
+        let endColor = UIColor.ypGradientEnd
         gradientLayer.colors = [startColor.cgColor, endColor.cgColor]
         gradientView.layer.addSublayer(gradientLayer)
     }

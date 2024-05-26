@@ -39,7 +39,7 @@ final class ImagesListViewController: UIViewController {
         cell.imageCard.image = image
         cell.dateLabel.text = dateFormatter.string(from: Date())
         
-        if indexPath.row % 2 == 0 {
+        if indexPath.row.isMultiple(of: 2) {
             cell.likeButton.setImage(UIImage(named: Constants.ImageNames.LikeOn), for: .normal)
         } else {
             cell.likeButton.setImage(UIImage(named: Constants.ImageNames.LikeOff), for: .normal)
@@ -51,7 +51,7 @@ final class ImagesListViewController: UIViewController {
 extension ImagesListViewController: TableProtocols {
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        
+        performSegue(withIdentifier: Constants.Other.showSingleImageSegueIdentifier, sender: indexPath)
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
@@ -79,5 +79,22 @@ extension ImagesListViewController: TableProtocols {
         let scale = imageViewWidth / imageWidth
         let cellHeight = image.size.height * scale + imageInsets.top + imageInsets.bottom
         return cellHeight
+    }
+    
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        if segue.identifier == Constants.Other.showSingleImageSegueIdentifier {
+            guard
+                let viewController = segue.destination as? SingleImageViewController,
+                let indexPath = sender as? IndexPath
+            else {
+                assertionFailure("Invalid segue destination")
+                return
+            }
+            
+            let image = UIImage(named: photosNames[indexPath.row])
+            viewController.image = image
+        } else {
+            super.prepare(for: segue, sender: sender)
+        }
     }
 }
