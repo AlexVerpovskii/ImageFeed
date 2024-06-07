@@ -10,7 +10,7 @@ import UIKit
 final class ImagesListCell: UITableViewCell {
     
     // MARK: - Static Properties
-    static let reuseIdentifier = Constants.Other.reuseIdentifier
+    static let reuseIdentifier = Constants.Identifiers.reuseIdentifier
     
     // MARK: - IB Outlets
     @IBOutlet weak var likeButton: UIButton!
