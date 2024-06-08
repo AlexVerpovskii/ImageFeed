@@ -7,6 +7,7 @@
 
 import Foundation
 
+//TODO: раскидать красиво
 enum Constants {
     
     enum SettingsKeys: String {
@@ -53,7 +54,8 @@ enum Constants {
         static let grantType = "grant_type"
         static let scope = "scope"
         static let host = "unsplash.com"
-        static let path = "/oauth/token"
+        static let pathToken = "/oauth/token"
+        static let pathAuthorize = "/oauth/authorize/native"
     }
     
     enum HTTPMethod {

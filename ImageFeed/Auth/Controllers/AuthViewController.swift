@@ -52,7 +52,6 @@ extension AuthViewController: WebViewViewControllerDelegate {
             guard let self else { return }
             switch result {
             case .success(let token):
-                print(token)
                 delegate?.didAuthenticate(self)
             case .failure(let error):
                 print(error)

@@ -68,7 +68,6 @@ final class WebViewViewController: UIViewController {
         
         guard let url = urlComponents.url else { return }
         
-        print(url)
         let request = URLRequest(url: url)
         webView.load(request)
     }
@@ -77,9 +76,9 @@ final class WebViewViewController: UIViewController {
         if
             let url = navigationAction.request.url,
             let urlComponents = URLComponents(string: url.absoluteString),
-            urlComponents.path == "/oauth/authorize/native",
+            urlComponents.path == Unsplash.pathAuthorize,
             let items = urlComponents.queryItems,
-            let codeItem = items.first(where: { $0.name == "code"} )
+            let codeItem = items.first(where: { $0.name == Constants.Other.requestCode} )
         {
             return codeItem.value
         } else {

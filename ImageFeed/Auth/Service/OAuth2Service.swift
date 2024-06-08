@@ -19,6 +19,7 @@ final class OAuth2Service {
                 do {
                     let token = try JSONDecoder().decode(OAuthTokenResponseBody.self, from: data)
                     OAuth2TokenStorage.shared.token = token.accessToken
+                    completion(.success(token.accessToken))
                 } catch {
                     print(error)
                 }
@@ -32,7 +33,7 @@ final class OAuth2Service {
         var urlComponents = URLComponents()
         urlComponents.scheme = Constants.Schema.https
         urlComponents.host = Unsplash.host
-        urlComponents.path = Unsplash.path
+        urlComponents.path = Unsplash.pathToken
         
         urlComponents.queryItems = [
             URLQueryItem(name: Unsplash.clientId, value: Unsplash.accessKey),

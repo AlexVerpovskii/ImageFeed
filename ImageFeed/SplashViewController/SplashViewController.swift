@@ -12,9 +12,7 @@ final class SplashViewController: UIViewController {
     //MARK: Lifecycle
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
-        
         let token = OAuth2TokenStorage.shared.token
-        print(token)
         if token.isEmpty {
             performSegue(withIdentifier: Constants.Identifiers.showAutheSegueIdentifier, sender: nil)
         }
@@ -41,8 +39,10 @@ final class SplashViewController: UIViewController {
 //MARK: Extension AuthViewControllerDelegate
 extension SplashViewController: AuthViewControllerDelegate {
     func didAuthenticate(_ vc: AuthViewController) {
-        vc.dismiss(animated: true)
-        switchToTabBarController()
+        vc.dismiss(animated: true) { [weak self] in
+            guard let self else { return }
+            self.switchToTabBarController()
+        }
     }
 }
 
