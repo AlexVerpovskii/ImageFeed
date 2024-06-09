@@ -51,7 +51,7 @@ final class ImagesListViewController: UIViewController {
 extension ImagesListViewController: TableProtocols {
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        performSegue(withIdentifier: Constants.Other.showSingleImageSegueIdentifier, sender: indexPath)
+        performSegue(withIdentifier: Constants.Identifiers.showSingleImageSegueIdentifier, sender: indexPath)
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
@@ -82,7 +82,7 @@ extension ImagesListViewController: TableProtocols {
     }
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        if segue.identifier == Constants.Other.showSingleImageSegueIdentifier {
+        if segue.identifier == Constants.Identifiers.showSingleImageSegueIdentifier {
             guard
                 let viewController = segue.destination as? SingleImageViewController,
                 let indexPath = sender as? IndexPath
