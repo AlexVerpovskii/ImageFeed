@@ -6,8 +6,11 @@
 //
 
 import UIKit
+import Kingfisher
 
 final class ProfileViewController: UIViewController {
+    private final let profileService = ProfileService.shared
+    private final var profileImageServiceObserver: NSObjectProtocol?
     
     //MARK: Private UI properties
     private lazy var avatarImage: UIImageView = {
@@ -61,12 +64,39 @@ final class ProfileViewController: UIViewController {
         super.viewDidLoad()
         setupSubview()
         setupConstraint()
+        profileImageServiceObserver = NotificationCenter.default.addObserver(
+            forName: ProfileImageService.didChangeNotification,
+            object: nil,
+            queue: .main,
+            using: { [weak self] _ in
+                guard let self else { return }
+                self.updateAvatar()
+            })
+        updateAvatar()
+        guard let profile = profileService.profile else { return }
+        updateProfileDetails(profile: profile)
     }
     
     //MARK: Private methods
     @objc
     private func didTapExitButton() {
         print("did tap exit button")
+    }
+    
+    private func updateProfileDetails(profile: Profile) {
+        guard let profile = profileService.profile else { return }
+        nameLabel.text = profile.name
+        nicknameLabel.text = profile.loginName
+        descriptionLabel.text = profile.bio
+    }
+    
+    private func updateAvatar() {
+        guard
+            let profileImageURL = ProfileImageService.shared.avatarURL,
+            let url = URL(string: profileImageURL)
+        else { return }
+        let processor = RoundCornerImageProcessor(cornerRadius: 70)
+        avatarImage.kf.setImage(with: url, options: [.processor(processor)])
     }
 }
 

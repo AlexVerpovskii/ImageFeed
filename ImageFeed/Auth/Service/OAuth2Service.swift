@@ -9,24 +9,39 @@ import Foundation
 
 final class OAuth2Service {
     static let shared = OAuth2Service()
+    private var task: URLSessionTask?
+    private var lastCode: String?
+    
     private init() {}
     
-    func fetchOAuthToken(code: String, completion: @escaping (Swift.Result<String, Error>) -> Void) {
+func fetchOAuthToken(code: String, completion: @escaping (Swift.Result<String, Error>) -> Void) {
+        assert(Thread.isMainThread)
+        guard lastCode != code
+        else {
+            completion(.failure(Constants.AuthServiceError.invalidRequest))
+            return
+        }
+        
+        task?.cancel()
+        lastCode = code
+        
         let request = makeOAuthTokenRequest(code: code)
-        URLSession.shared.data(for: request) { result in
+    
+        let task = URLSession.shared.objectTask(for: request) { [weak self] (result: Result<OAuthTokenResponseBody, Error>) in
             switch result {
             case .success(let data):
-                do {
-                    let token = try JSONDecoder().decode(OAuthTokenResponseBody.self, from: data)
-                    OAuth2TokenStorage.shared.token = token.accessToken
-                    completion(.success(token.accessToken))
-                } catch {
-                    print(error)
-                }
+                OAuth2TokenStorage.shared.token = data.accessToken
+                self?.task = nil
+                self?.lastCode = nil
+                completion(.success(data.accessToken))
             case .failure(let error):
-                print(error)
+                print("OAuth2Service.fetchOAuthToken: \(error)")
+                completion(.failure(error
+                                   ))
             }
-        }.resume()
+        }
+        self.task = task
+        task.resume()
     }
     
     private func makeOAuthTokenRequest(code: String) -> URLRequest {

@@ -8,15 +8,32 @@
 import UIKit
 
 final class SplashViewController: UIViewController {
+    private final var profileService = ProfileService.shared
+    private final let profileImageService = ProfileImageService.shared
     
-    //MARK: Lifecycle
+    private lazy var imageView: UIImageView = {
+        var imageView = UIImageView()
+        imageView.translatesAutoresizingMaskIntoConstraints = false
+        imageView.image = UIImage(named: Constants.ImageNames.vector)
+        return imageView
+    }()
+    
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        view.addSubview(imageView)
+        setupConstraint()
+    }
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
         let token = OAuth2TokenStorage.shared.token
-        if token.isEmpty {
-            performSegue(withIdentifier: Constants.Identifiers.showAutheSegueIdentifier, sender: nil)
+        if token == nil {
+            let authViewController = AuthViewController()
+            authViewController.delegate = self
+            present(authViewController, animated: true)
         }
         else {
+            guard let token else { return }
+            fetchProfile(token)
             switchToTabBarController()
         }
     }
@@ -34,6 +51,40 @@ final class SplashViewController: UIViewController {
         window.rootViewController = tabBarController
     }
     
+    private func setupConstraint() {
+        NSLayoutConstraint.activate([
+            imageView.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+            imageView.centerYAnchor.constraint(equalTo: view.centerYAnchor),
+        ])
+    }
+    
+    private func fetchProfile(_ token: String) {
+        UIBlockingProgressHUD.show()
+        profileService.fetchProfile(token) { [weak self] result in
+            UIBlockingProgressHUD.dismiss()
+            
+            guard let self = self else { return }
+            
+            switch result {
+            case .success(let profile):
+                profileImageService.fetchProfileImageURL(userName: profile.username) { [weak self] result in
+                    guard let self = self else { return }
+                    switch result {
+                    case .success(_):
+                        switchToTabBarController()
+                    case .failure(let error):
+                        print(error)
+                    }
+                }
+            case .failure(let error):
+                print(error)
+                break
+            }
+        }
+        
+        
+    }
+    
 }
 
 //MARK: Extension AuthViewControllerDelegate
@@ -42,24 +93,6 @@ extension SplashViewController: AuthViewControllerDelegate {
         vc.dismiss(animated: true) { [weak self] in
             guard let self else { return }
             self.switchToTabBarController()
-        }
-    }
-}
-
-//MARK: Extension SplashViewController, override prepare
-extension SplashViewController {
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        if segue.identifier == Constants.Identifiers.showAutheSegueIdentifier  {
-            guard
-                let navigationController = segue.destination as? UINavigationController,
-                let viewController = navigationController.viewControllers[0] as? AuthViewController
-            else {
-                assertionFailure("Failed to prepare for \(Constants.Identifiers.showAutheSegueIdentifier)")
-                return
-            }
-            viewController.delegate = self
-        } else {
-            super.prepare(for: segue, sender: sender)
         }
     }
 }

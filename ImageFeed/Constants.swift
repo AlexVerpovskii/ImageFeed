@@ -10,7 +10,7 @@ import Foundation
 //TODO: раскидать красиво
 enum Constants {
     
-    enum SettingsKeys: String {
+enum SettingsKeys: String {
         case token
     }
     
@@ -20,6 +20,7 @@ enum Constants {
         static let avatarPhoto = "Photo"
         static let exitButtonIcon = "ipad.and.arrow.forward"
         static let navBackButton = "nav_back_button"
+        static let vector = "Vector"
     }
     
     enum Identifiers {
@@ -45,16 +46,20 @@ enum Constants {
         static let redirectURI = "urn:ietf:wg:oauth:2.0:oob"
         static let accessScope = "public+read_user+write_likes"
         static let authorizationCode = "authorization_code"
-        static let defaultBaseURL = URL(string: "https://api.unsplash.com")!
+        static let defaultBaseURL = "api.unsplash.com"
         static let unsplashAuthorizeURLString = "https://unsplash.com/oauth/authorize"
         static let clientId = "client_id"
         static let clientSecret = "client_secret"
         static let redirectUriParam = "redirect_uri"
         static let responseType = "response_type"
+        static let bearer = "Bearer"
+        static let authorization = "Authorization"
         static let grantType = "grant_type"
         static let scope = "scope"
         static let host = "unsplash.com"
         static let pathToken = "/oauth/token"
+        static let pathProfile = "/me"
+        static let pathUsers = "/users"
         static let pathAuthorize = "/oauth/authorize/native"
     }
     
@@ -72,5 +77,9 @@ enum Constants {
         case httpStatusCode(Int)
         case urlRequestError(Error)
         case urlSessionError
+    }
+    
+    enum AuthServiceError: Error {
+        case invalidRequest
     }
 }

@@ -35,4 +35,24 @@ extension URLSession {
         
         return task
     }
+    
+    func objectTask<T: Decodable>(
+        for request: URLRequest,
+        completion: @escaping (Result<T, Error>) -> Void
+    ) -> URLSessionTask {
+        let task = data(for: request) { (result: Result<Data, Error>) in
+            switch result {
+            case .success(let data):
+                do {
+                    let data = try JSONDecoder().decode(T.self, from: data)
+                    completion(.success(data))
+                } catch {
+                    print(error)
+                }
+            case .failure(let error):
+                print(error)
+            }
+        }
+        return task
+    }
 }
